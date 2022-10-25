@@ -3,13 +3,17 @@ const buildApp = require('../../app');
 const UserRepo = require('../../repos/user-repo');
 const pool = require('../../pool');
 const Context = require('../context');
-
+let context;
 beforeAll(async () => {
-    const context = await Context.build();
+    context = await Context.build();
 });
 
+beforeEach(async() => {
+    return await context.reset();
+})
+
 afterAll(() => {
-    return pool.close();
+    return context.close();
 });
 
 test('create a user', async() => {
